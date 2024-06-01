@@ -1,3 +1,6 @@
+SparkSQL UDF (User Defined Function)
+------------------------------------
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, avg
 from pyspark.sql.types import StringType
