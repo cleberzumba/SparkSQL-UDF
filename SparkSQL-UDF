@@ -16,7 +16,7 @@ df = spark.createDataFrame(data, columns)
 
 
 ######################################################
-# Como calcular a média de velocidade por faixa etária
+# How to calculate the average speed by age group
 ######################################################
 
 # Função para criar faixa etária
@@ -52,7 +52,7 @@ userDFAgeGroup.groupBy('AgeGroup') \
 
 
 #############################################################
-# Como calcular a média de velocidade por faixa de velocidade
+# How to calculate average speed by speed range
 #############################################################
 
 # Função para criar faixa de velocidade
