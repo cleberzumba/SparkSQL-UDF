@@ -5,10 +5,10 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, avg
 from pyspark.sql.types import StringType
 
-# Inicializa a SparkSession
+# Initialize the SparkSession
 spark = SparkSession.builder.appName("AgeGroupApp").getOrCreate()
 
-# Cria um DataFrame de exemplo (substitua isto com o carregamento do seu DataFrame real)
+# Creates an example DataFrame (replace this with loading your actual DataFrame)
 data = [(1, 15, 60), (2, 25, 70), (3, 35, 80), (4, 45, 90)]
 columns = ["id", "age", "Speed"]
 df = spark.createDataFrame(data, columns)
@@ -19,7 +19,7 @@ df = spark.createDataFrame(data, columns)
 # How to calculate the average speed by age group
 ######################################################
 
-# Função para criar faixa etária
+# Function to create age group
 def cria_faixa_etaria(age):
     if age < 20:
         return '10–20'
@@ -30,18 +30,18 @@ def cria_faixa_etaria(age):
     else:
         return '40+'
 
-# Cria a UDF
+# Create the UDF
 udf_agegroup = udf(cria_faixa_etaria, StringType())
 
-# Aplica a UDF
+# Apply the UDF
 userDFAgeGroup = df.withColumn('AgeGroup', udf_agegroup('age'))
 
 
-# Mostra o DataFrame resultante
+# Show the resulting DataFrame
 userDFAgeGroup.show()
 
-# Group By, Agregação e Ordenação
-# Média de velocidade por faixa etária
+# Group By, Aggregation and Ordering
+# Average speed by age group
 userDFAgeGroup.groupBy('AgeGroup') \
               .agg(avg('Speed').alias('avg_speed')) \
               .orderBy('avg_speed', ascending=False) \
@@ -55,7 +55,7 @@ userDFAgeGroup.groupBy('AgeGroup') \
 # How to calculate average speed by speed range
 #############################################################
 
-# Função para criar faixa de velocidade
+# Function to create speed range
 def cria_faixa_veloc(speed):
     if speed < 50:
         return 'Baixa Velocidade'
@@ -65,18 +65,18 @@ def cria_faixa_veloc(speed):
         return 'Alta Velocidade'
 
 
-# Cria a UDF
+# Create the UDF
 udf_speedgroup = udf(lambda z: cria_faixa_veloc(z))
 
-# Aplica a UDF
+# Apply the UDF
 userDFSpeedGroup = userDFAgeGroup.withColumn('SpeedGroup', udf_speedgroup('Speed'))
 
 
 userDFSpeedGroup.show()
 
 
-# Group By, Agregação e Ordenação
-# Média de velocidade por grupo de velocidade
+# Group By, Aggregation and Ordering
+# Average speed by speed group
 userDFSpeedGroup.groupBy('AgeGroup') \
                 .agg(avg('Speed').alias('avg_speed')) \
                 .orderBy('avg_speed', ascending=False) \
